@@ -1,0 +1,31 @@
+{
+  "name": "simple-timeline",
+  "version": "1.0.0",
+  "description": "Decentralized timeline academic project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmatalonga/simple-timeline.git"
+  },
+  "author": "Hugo Matalonga",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hmatalonga/simple-timeline/issues"
+  },
+  "homepage": "https://github.com/hmatalonga/simple-timeline#readme",
+  "dependencies": {
+    "discovery-swarm": "^5.1.4",
+    "duplex-json-stream": "^1.0.1",
+    "fully-connected-topology": "^1.1.1",
+    "hash-to-port": "^1.0.0",
+    "level": "^5.0.1",
+    "lookup-multicast-dns": "^1.0.3",
+    "register-multicast-dns": "^1.1.0",
+    "scuttleup": "^3.3.0",
+    "stream-set": "^1.1.0"
+  }
+}
