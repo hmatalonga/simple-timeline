@@ -1,28 +1,32 @@
+require('lookup-multicast-dns/global')
 const path = require('path')
 const level = require('level')
 const toPort = require('hash-to-port')
 const scuttleup = require('scuttleup')
 const streamSet = require('stream-set')
-const swarm = require('discovery-swarm')
-
-const Subscribed = require('./subscribed')
+const register = require('register-multicast-dns')
+const topology = require('fully-connected-topology')
+json
+const Subscribed = require('../subscribed')
 
 // Helper method to generate a peer network friendly id
 const toAddress = name => (`${name}.local:${toPort(name)}`)
 
 
-class DiscoveryNetwork {
-  constructor(username, topic = 'p2p', debug = false) {
+class ConnectedNetwork {
+  constructor(username, peers, debug = false) {
     this.me = username
-    this.topic = topic
-    this.subs = new Subscribed(path.join('data', `${username}.subscribed.json`))
+    this.subs = new Subscribed(this.me, path.join('data', `${username}.subscribed.json`))
     this.connections = streamSet()
 
     this.logs = scuttleup(
       level(path.join('data', `${username}.db`)),
       { valueEncoding: 'json' }
     )
-    this.swarm = swarm()
+    this.swarm = topology(
+      toAddress(this.me),
+      peers.map(toAddress)
+    )
     
     this.debug = debug
     this.timeline = []
@@ -31,11 +35,10 @@ class DiscoveryNetwork {
   }
 
   init() {
-    this.swarm.listen(toPort(this.me))
-    this.swarm.join(this.topic)
+    register(this.me)
 
-    this.swarm.on('connection', (socket, info) => {
-      console.log(`info> found + connected to peer!`)
+    this.swarm.on('connection', (socket, id) => {
+      console.log(`info> ${id} has connected!`)
       socket.pipe(this.logs.createReplicationStream({ live: true })).pipe(socket)
       this.connections.add(socket)
     })
@@ -43,7 +46,7 @@ class DiscoveryNetwork {
     this.logs
         .createReadStream({ live: true })
         .on('data', ({ entry }) => {
-          if (this.me !== entry.username && !this.subs.isFollowing(entry.username)) return
+          if (!this.subs.isFollowing(entry.username)) return
           this.appendToTimeline(`${entry.username}> ${entry.message}`)
         })
   }
@@ -52,9 +55,18 @@ class DiscoveryNetwork {
     this.swarm.add(toAddress(peer))
   }
 
-  subscribeUser(user) {
+  close() {
+    this.swarm.destroy()
+  }
+
+  subscribeUser(user, discover = false) {
     this.subs.addUser(user)
     this.subs.save(path.join('data', `${this.me}.subscribed.json`))
+    
+    // Do you add the peer explicitly??
+    if (discover) {
+      this.addPeer(user)
+    }
   }
 
   writeMessage(data) {
@@ -75,4 +87,4 @@ class DiscoveryNetwork {
   }
 }
 
-module.exports = DiscoveryNetwork
+module.exports = ConnectedNetwork

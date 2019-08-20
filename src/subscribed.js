@@ -3,8 +3,8 @@
 const fs = require('fs');
 
 class Subscribed {
-  constructor(filepath) {
-    this.collection = []
+  constructor(me, filepath) {
+    this.collection = [me.toLowerCase()]
     try {
       if (fs.existsSync(filepath)) {
         this.collection = JSON.parse(fs.readFileSync(filepath))
@@ -15,7 +15,7 @@ class Subscribed {
   }
 
   addUser(user) {
-    this.collection = [...new Set([...this.collection, user])]
+    this.collection = [...new Set([...this.collection, user])].sort()
   }
 
   getUsers() {

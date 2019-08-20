@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/hmatalonga/simple-timeline#readme",
   "dependencies": {
+    "@hyperswarm/network": "0.0.4",
     "discovery-swarm": "^5.1.4",
     "duplex-json-stream": "^1.0.1",
     "fully-connected-topology": "^1.1.1",
@@ -26,6 +27,9 @@
     "lookup-multicast-dns": "^1.0.3",
     "register-multicast-dns": "^1.1.0",
     "scuttleup": "^3.3.0",
-    "stream-set": "^1.1.0"
+    "secure-gossip": "^0.3.1",
+    "stream-set": "^1.1.0",
+    "through2": "^3.0.1",
+    "vector-clock-class": "^2.0.0"
   }
 }

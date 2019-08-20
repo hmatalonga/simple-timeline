@@ -29,7 +29,7 @@ function help() {
     '/post {message} - Post a new message',
     '/subscribe {username} - Subscribe to an user',
     '/following - Displays following users',
-    '/exit - Quits the application'
+    '/q - Quits the application'
   ]
   console.log('The following commands are available:')
   choices.forEach(cmd => console.log(cmd))
@@ -43,7 +43,7 @@ function exitApp() {
 
 // ** Main loop **
 const username = process.argv[2] || 'guest'
-const topic = process.argv[3] || 'p2p'
+const topic = process.argv[3] || 'timeline'
 // const peers = process.argv.slice(3)
 const network = new DiscoveryNetwork(username, topic)
 
@@ -59,7 +59,7 @@ process.stdin.on('data', function (data) {
   const choice = input[0].slice(1).toLowerCase()
   const content = input.slice(1).join(' ')
   
-  if (choice === 'exit') {
+  if (choice === 'q') {
     exitApp()
   } else if (choice === 'feed') {
     showFeed()
@@ -75,3 +75,5 @@ process.stdin.on('data', function (data) {
     console.log('Unknown command...')
   }
 })
+
+// hypercore hyperdht

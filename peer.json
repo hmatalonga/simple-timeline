@@ -1,0 +1,11 @@
+{
+  "type": "tcp",
+  "client": true,
+  "peer": { 
+    "port": 37345,
+    "host": "192.168.1.70",
+    "local": true,
+    "referrer": null,
+    "topic": "<Buffer 94 d1 92 b3 a3 26 be 1f 01 9b 71 ef 13 ea 5a 36 7f fe 93 9c 5e 9a 88 f1 b2 70 e5 37 53 d9 56 9a>"
+  }
+}
